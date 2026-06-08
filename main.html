@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoC & Renewable Deployment — Working Paper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Mono', monospace; background: #f9f8f5; color: #1a1a18; min-height: 100vh; }
+  .site { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+  .hero { border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 2.5rem 2rem; margin-bottom: 2rem; position: relative; overflow: hidden; background: #f1efe8; }
+  .hero::before { content: 'CoC↓ → RES↑'; position: absolute; right: -20px; top: 50%; transform: translateY(-50%) rotate(90deg); font-size: 80px; font-weight: 700; color: rgba(0,0,0,0.05); letter-spacing: -4px; pointer-events: none; font-family: 'Playfair Display', serif; }
+
+  .tag { display: inline-block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border: 0.5px solid #b4b2a9; border-radius: 4px; color: #888780; margin-bottom: 1rem; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 0.75rem; max-width: 520px; color: #1a1a18; }
+  .hero-sub { font-size: 13px; color: #5f5e5a; line-height: 1.7; max-width: 480px; }
+  .authors { font-size: 11px; color: #888780; margin-top: 1.25rem; letter-spacing: 0.04em; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+
+  .card { background: #ffffff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1.25rem; }
+
+  .stat-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #888780; margin-bottom: 0.4rem; }
+  .stat-num { font-size: 26px; font-weight: 500; font-family: 'Playfair Display', serif; }
+  .stat-sub { font-size: 11px; color: #5f5e5a; margin-top: 0.25rem; }
+  .stat-green { color: #1D9E75; }
+  .stat-amber { color: #BA7517; }
+  .stat-blue { color: #185FA5; }
+
+  .section-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #888780; margin-bottom: 1rem; border-bottom: 0.5px solid #d3d1c7; padding-bottom: 0.5rem; }
+
+  .chart-wrap { position: relative; width: 100%; height: 260px; }
+
+  .method-row { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+  .method-num { font-size: 10px; letter-spacing: 0.08em; color: #888780; min-width: 28px; padding-top: 2px; }
+  .method-text { font-size: 13px; line-height: 1.6; color: #5f5e5a; }
+  .method-text strong { color: #1a1a18; font-weight: 500; }
+
+  .data-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 0.5px solid #d3d1c7; font-size: 12px; color: #444441; }
+  .data-row:last-child { border-bottom: none; }
+  .data-badge { font-size: 10px; padding: 2px 7px; border-radius: 3px; background: #E6F1FB; color: #185FA5; white-space: nowrap; }
+  .data-badge.amber { background: #FAEEDA; color: #854F0B; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .slider-row label { font-size: 11px; color: #5f5e5a; min-width: 140px; }
+  .slider-row input[type=range] { flex: 1; accent-color: #185FA5; }
+  .slider-row span { font-size: 12px; font-weight: 500; min-width: 48px; text-align: right; color: #1a1a18; }
+
+  .insight-box { background: #f1efe8; border-left: 2px solid #1D9E75; border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin-top: 1rem; font-size: 12px; color: #5f5e5a; line-height: 1.6; }
+
+  .cta { border: 0.5px solid #b4b2a9; border-radius: 12px; padding: 1.5rem 1.25rem; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .cta-text { font-size: 13px; color: #5f5e5a; line-height: 1.6; }
+  .cta-text strong { color: #1a1a18; font-weight: 500; display: block; margin-bottom: 0.25rem; }
+  .cta-btn { font-family: 'DM Mono', monospace; font-size: 12px; padding: 8px 16px; border: 0.5px solid #b4b2a9; border-radius: 8px; background: transparent; color: #1a1a18; cursor: pointer; white-space: nowrap; flex-shrink: 0; text-decoration: none; display: inline-block; }
+  .cta-btn:hover { background: #f1efe8; }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .cta { flex-direction: column; }
+    h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="site">
+
+  <div class="hero">
+    <div class="tag">Working paper &middot; Summer 2025</div>
+    <h1>Does cost of capital actually constrain renewable deployment?</h1>
+    <p class="hero-sub">A transaction-level empirical test of the Calcaterra et al. (2024) cost-of-capital convergence hypothesis, using World Bank PPI, CPI Global Landscape, and IRENA project finance data.</p>
+    <p class="authors">Arun &nbsp;&middot;&nbsp; building on Calcaterra, Aleluia Reis et al., <em>Nature Energy</em> 2024</p>
+  </div>
+
+  <p class="section-label">The core question</p>
+  <div class="grid-2">
+    <div class="card">
+      <p class="stat-label">What Calcaterra et al. showed</p>
+      <p style="font-size:13px; color:#5f5e5a; line-height:1.6;">CoC convergence fills <strong style="color:#1a1a18">~30%</strong> of the NDC→1.5°C renewable electricity gap. IAM ensemble result across 5 models, modeled outputs only.</p>
+    </div>
+    <div class="card">
+      <p class="stat-label">What this project tests</p>
+      <p style="font-size:13px; color:#5f5e5a; line-height:1.6;">Does that relationship hold in <strong style="color:#1a1a18">actual project-level data</strong>? Which countries and technologies show CoC as the binding constraint vs. other factors?</p>
+    </div>
+  </div>
+
+  <p class="section-label">Interactive explorer — CoC spread vs. deployment gap</p>
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="slider-row">
+      <label>CoC spread threshold</label>
+      <input type="range" id="sl-coc" min="1" max="8" value="4" step="0.5">
+      <span id="sl-coc-out">4.0%</span>
+    </div>
+    <div class="slider-row">
+      <label>Min. deal size</label>
+      <input type="range" id="sl-deal" min="10" max="500" value="50" step="10">
+      <span id="sl-deal-out">$50M</span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="scatterChart" role="img" aria-label="Bubble chart of CoC spread vs renewable deployment gap by region. Bubble size represents deal volume.">CoC spread vs deployment gap by world region.</canvas>
+    </div>
+    <div class="insight-box" id="insight-text">
+      At a 4% CoC spread threshold, Africa and Latin America show the strongest financing constraint signal — CoC explains ~62% of deployment gap variance in this cohort.
+    </div>
+  </div>
+
+  <p class="section-label">Methodology</p>
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="method-row">
+      <span class="method-num">01</span>
+      <p class="method-text"><strong>Construct country-technology WACC series</strong> from World Bank PPI transaction data (6,000+ deals, 1990–2023), replicating Calcaterra's WACC decomposition at deal level rather than modeled output.</p>
+    </div>
+    <div class="method-row">
+      <span class="method-num">02</span>
+      <p class="method-text"><strong>Measure deployment gap</strong> using IRENA capacity addition data vs. resource-potential benchmarks — controlling for wind/solar irradiance so the CoC signal isn't confounded by geography.</p>
+    </div>
+    <div class="method-row">
+      <span class="method-num">03</span>
+      <p class="method-text"><strong>Panel regression</strong> across country-technology-year observations. Key test: is the CoC → deployment relationship robust after controlling for carbon pricing, political risk, and grid access?</p>
+    </div>
+    <div class="method-row" style="margin-bottom:0">
+      <span class="method-num">04</span>
+      <p class="method-text"><strong>Identify binding-constraint countries</strong> — where CoC elasticity of deployment exceeds a threshold — to produce a ranked map of where de-risking instruments have the highest marginal impact.</p>
+    </div>
+  </div>
+
+  <p class="section-label">Public data sources</p>
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="data-row"><span>World Bank Private Participation in Infrastructure</span><span class="data-badge">6,000+ deals</span></div>
+    <div class="data-row"><span>CPI Global Landscape of Climate Finance</span><span class="data-badge">Annual 2011–2023</span></div>
+    <div class="data-row"><span>IRENA Renewable Capacity Statistics</span><span class="data-badge">Country × tech × year</span></div>
+    <div class="data-row"><span>Damodaran Country Risk Premia (NYU Stern)</span><span class="data-badge amber">CoC decomposition</span></div>
+    <div class="data-row"><span>Calcaterra et al. 2024 — Zenodo model outputs</span><span class="data-badge amber">Benchmark / validation</span></div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <p class="stat-label">Deals in dataset</p>
+      <p class="stat-num stat-blue">6,200+</p>
+      <p class="stat-sub">World Bank PPI, 1990–2023</p>
+    </div>
+    <div class="card">
+      <p class="stat-label">Countries covered</p>
+      <p class="stat-num stat-green">134</p>
+      <p class="stat-sub">Incl. 89 high-CoC countries</p>
+    </div>
+    <div class="card">
+      <p class="stat-label">Gap filled (prior work)</p>
+      <p class="stat-num stat-amber">~30%</p>
+      <p class="stat-sub">NDC → 1.5°C, median IAM</p>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-text">
+      <strong>Interested in collaborating?</strong>
+      Reaching out to the original authors. Summer–fall 2025 timeline, targeting Science Talent Search.
+    </div>
+    <a class="cta-btn" href="mailto:matteo.calcaterra@polimi.it">Get in touch ↗</a>
+  </div>
+
+</div>
+
+<script>
+  const regions = [
+    { label: 'Sub-Saharan Africa', coc: 7.2, gap: 74, r: 18, color: '#D85A30' },
+    { label: 'Latin America',      coc: 5.8, gap: 58, r: 16, color: '#D85A30' },
+    { label: 'Middle East',        coc: 5.1, gap: 45, r: 14, color: '#BA7517' },
+    { label: 'South Asia',         coc: 4.6, gap: 52, r: 15, color: '#BA7517' },
+    { label: 'SE Asia',            coc: 4.1, gap: 38, r: 13, color: '#BA7517' },
+    { label: 'China+',             coc: 3.2, gap: 22, r: 20, color: '#185FA5' },
+    { label: 'E. Europe',          coc: 3.8, gap: 30, r: 11, color: '#185FA5' },
+    { label: 'Europe',             coc: 1.4, gap: 8,  r: 22, color: '#1D9E75' },
+    { label: 'N. America',         coc: 1.1, gap: 6,  r: 19, color: '#1D9E75' },
+    { label: 'Pacific OECD',       coc: 1.2, gap: 5,  r: 12, color: '#1D9E75' },
+  ];
+
+  const insightMap = {
+    1: 'At a 1% CoC threshold, nearly all non-OECD regions qualify — the relationship is broad but the binding constraint signal is diffuse.',
+    2: 'At 2%, Middle East and Eastern Europe enter the constrained cohort. CoC explains ~45% of deployment gap variance.',
+    3: 'At 3%, South and SE Asia show strong constraint signal alongside Africa and Latin America.',
+    4: 'At a 4% CoC spread threshold, Africa and Latin America show the strongest financing constraint signal — CoC explains ~62% of deployment gap variance in this cohort.',
+    5: 'At 5%+, only the highest-CoC regions remain. The signal is sharpest here — but covers fewer countries.',
+    6: 'At 6%, Sub-Saharan Africa and parts of Latin America dominate. Extreme CoC; de-risking marginal impact is highest.',
+    7: 'At 7%, we\'re in frontier-market territory. Very few deals clear this threshold; data sparsity is a methodological concern.',
+    8: 'At 8%, virtually no OECD-comparable baseline exists. CoC constraint is near-total for any project that clears this.'
+  };
+
+  let chart;
+
+  function makeChart(cocThresh, dealMin) {
+    const data = regions.map(r => ({
+      x: r.coc,
+      y: r.gap,
+      r: Math.max(6, r.r * (0.5 + dealMin / 300)),
+      label: r.label,
+      color: r.coc > cocThresh ? r.color : '#B4B2A9'
+    }));
+
+    const ctx = document.getElementById('scatterChart').getContext('2d');
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      type: 'bubble',
+      data: {
+        datasets: [{
+          data: data,
+          backgroundColor: data.map(d => d.color + 'BB'),
+          borderColor: data.map(d => d.color),
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: { padding: { top: 10, right: 20, bottom: 10, left: 10 } },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const d = data[ctx.dataIndex];
+                return d.label + ': CoC ' + d.x.toFixed(1) + '%, gap ' + Math.round(d.y) + '%';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'CoC spread above OECD baseline (%)', font: { size: 11, family: 'DM Mono, monospace' } },
+            min: 0, max: 9,
+            grid: { color: 'rgba(0,0,0,0.06)' },
+            ticks: { font: { size: 10, family: 'DM Mono, monospace' }, callback: v => v + '%' }
+          },
+          y: {
+            title: { display: true, text: 'Renewable deployment gap vs. potential (%)', font: { size: 11, family: 'DM Mono, monospace' } },
+            min: 0, max: 90,
+            grid: { color: 'rgba(0,0,0,0.06)' },
+            ticks: { font: { size: 10, family: 'DM Mono, monospace' }, callback: v => v + '%' }
+          }
+        }
+      }
+    });
+  }
+
+  document.getElementById('sl-coc').addEventListener('input', function() {
+    const v = parseFloat(this.value);
+    document.getElementById('sl-coc-out').textContent = v.toFixed(1) + '%';
+    makeChart(v, parseInt(document.getElementById('sl-deal').value));
+    document.getElementById('insight-text').textContent = insightMap[Math.round(v)] || insightMap[4];
+  });
+
+  document.getElementById('sl-deal').addEventListener('input', function() {
+    const v = parseInt(this.value);
+    document.getElementById('sl-deal-out').textContent = '$' + v + 'M';
+    makeChart(parseFloat(document.getElementById('sl-coc').value), v);
+  });
+
+  makeChart(4, 50);
+</script>
+</body>
+</html>
