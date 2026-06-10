@@ -3,520 +3,341 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CoC × Renewables — Research Tool</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<title>CoC × Renewables</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#fafafa;
-  --surface:#ffffff;
-  --surface2:#f5f5f5;
-  --border:#e5e5e5;
-  --border2:#d4d4d4;
-  --text:#111111;
-  --text2:#555555;
-  --text3:#999999;
-  --accent:#2563eb;
-  --green:#16a34a;
-  --orange:#ea580c;
-  --red:#dc2626;
-  --purple:#7c3aed;
+  --bg:#f9f9f9;--surf:#fff;--b:#e5e5e5;--b2:#d4d4d4;
+  --t:#111;--t2:#666;--t3:#aaa;
+  --blue:#2563eb;--green:#16a34a;--orange:#ea580c;--red:#dc2626;--purple:#7c3aed;
 }
-html{scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.5}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t);-webkit-font-smoothing:antialiased;font-size:13px}
 
-nav{position:sticky;top:0;z-index:100;background:rgba(250,250,250,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 2rem;gap:2rem}
-.nav-brand{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap}
-.nav-brand span{color:var(--text3);font-weight:400}
-.nav-links{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--surface)}
-.navl{font-size:12px;font-weight:500;padding:6px 16px;cursor:pointer;border:none;background:transparent;color:var(--text2);border-right:1px solid var(--border);transition:all 0.15s;white-space:nowrap}
-.navl:last-child{border-right:none}
-.navl:hover{background:var(--surface2);color:var(--text)}
-.navl.on{background:var(--text);color:white}
-.nav-cite{margin-left:auto;font-size:11px;color:var(--text3);font-style:italic}
+nav{position:sticky;top:0;z-index:100;background:rgba(249,249,249,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);height:48px;display:flex;align-items:center;padding:0 1.5rem;gap:1.5rem}
+.brand{font-size:13px;font-weight:600;white-space:nowrap}
+.brand span{color:var(--t3);font-weight:400}
+.tabs{display:flex;gap:0;background:var(--surf);border:1px solid var(--b);border-radius:7px;overflow:hidden}
+.tab{font-size:12px;font-weight:500;padding:5px 14px;cursor:pointer;border:none;background:transparent;color:var(--t2);border-right:1px solid var(--b);transition:all 0.15s;white-space:nowrap}
+.tab:last-child{border-right:none}
+.tab:hover{background:var(--bg);color:var(--t)}
+.tab.on{background:var(--t);color:#fff}
+.nav-r{margin-left:auto;font-size:11px;color:var(--t3);font-style:italic;white-space:nowrap}
 
 .page{display:none}.page.on{display:block}
-.wrap{max-width:960px;margin:0 auto;padding:2.5rem 2rem}
+.wrap{max-width:940px;margin:0 auto;padding:2rem 1.5rem}
 
-/* ── OVERVIEW ── */
-.ov-top{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem;align-items:start}
-.ov-headline{font-size:38px;font-weight:600;letter-spacing:-0.02em;line-height:1.1;margin-bottom:1rem}
-.ov-headline em{font-style:italic;color:var(--text3)}
-.ov-body{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:1.25rem}
-.ov-ask{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:14px 16px;font-size:13px;color:var(--text2);line-height:1.6}
-.ov-ask strong{color:var(--text);font-weight:500;display:block;margin-bottom:4px}
+/* OVERVIEW */
+.ov-grid{display:grid;grid-template-columns:320px 1fr;gap:1.5rem;align-items:start}
+.ov-left h1{font-size:28px;font-weight:600;letter-spacing:-0.02em;line-height:1.15;margin-bottom:.75rem}
+.ov-left h1 em{font-style:italic;color:var(--t3)}
+.ov-left p{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:.75rem}
+.ask{border-left:3px solid var(--blue);padding:.6rem .9rem;background:var(--surf);font-size:12px;color:var(--t2);line-height:1.6;margin-top:1rem}
+.ask strong{color:var(--t);display:block;margin-bottom:2px}
+.scatter-card{background:var(--surf);border:1px solid var(--b);border-radius:8px;padding:1.25rem}
+.card-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.card-title{font-size:12px;font-weight:600}
+.card-sub{font-size:11px;color:var(--t3)}
+.card-note{font-size:11px;color:var(--t3);margin-bottom:.75rem;line-height:1.4}
+.cbox{position:relative;height:300px}
 
-.scatter-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
-.sc-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.25rem}
-.sc-title{font-size:13px;font-weight:600}
-.sc-sub{font-size:11px;color:var(--text3)}
-.sc-note{font-size:11px;color:var(--text3);margin-bottom:1rem;line-height:1.5}
-.chart-box{position:relative;height:280px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b);border:1px solid var(--b);border-radius:8px;overflow:hidden;margin-top:1.5rem}
+.tc{background:var(--surf);padding:1rem 1.1rem}
+.tc-n{font-size:26px;font-weight:600;letter-spacing:-0.02em;margin-bottom:2px}
+.tc-l{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem}
+.tc-b{font-size:12px;color:var(--t2);line-height:1.5}
 
-.three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem}
-.tg-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem}
-.tg-num{font-size:28px;font-weight:600;letter-spacing:-0.02em;margin-bottom:2px}
-.tg-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
-.tg-body{font-size:12px;color:var(--text2);line-height:1.5}
+/* GAP */
+.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.panel{background:var(--surf);border:1px solid var(--b);border-radius:8px;padding:1.25rem}
+.panel-title{font-size:12px;font-weight:600;margin-bottom:1rem}
+.ctrl{margin-bottom:1rem}
+.ctrl:last-child{margin-bottom:0}
+.ctrl-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:5px}
+.ctrl-lbl b{color:var(--t);font-weight:500}
+input[type=range]{width:100%;height:3px;-webkit-appearance:none;background:var(--b2);border-radius:2px;cursor:pointer;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.22);cursor:pointer}
+.seg{display:flex;border:1px solid var(--b);border-radius:6px;overflow:hidden;margin-top:6px}
+.so{flex:1;font-size:11px;font-weight:500;padding:5px 0;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--t2);border-right:1px solid var(--b);transition:all .15s}
+.so:last-child{border-right:none}
+.so.on{background:var(--t);color:#fff}
 
-/* ── GAP FILL ── */
-.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-.controls{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
-.ctrl-title{font-size:13px;font-weight:600;margin-bottom:1.25rem}
-.ctrl-row{margin-bottom:1.25rem}
-.ctrl-row:last-child{margin-bottom:0}
-.ctrl-lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
-.ctrl-lbl span:first-child{color:var(--text2)}
-.ctrl-lbl span:last-child{font-weight:500;color:var(--text)}
-input[type=range]{width:100%;height:3px;-webkit-appearance:none;background:var(--border2);border-radius:2px;cursor:pointer;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.2);cursor:pointer}
-.seg{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-top:8px}
-.seg-opt{flex:1;font-size:11px;font-weight:500;padding:6px 4px;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--text2);transition:all 0.15s;border-right:1px solid var(--border)}
-.seg-opt:last-child{border-right:none}
-.seg-opt.on{background:var(--text);color:white}
+.big-n{font-size:52px;font-weight:600;letter-spacing:-0.03em;line-height:1;text-align:center;padding:1.25rem 0;border-bottom:1px solid var(--b);margin-bottom:1rem}
+.mini4{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
+.mini{background:var(--bg);border-radius:6px;padding:.6rem;text-align:center}
+.mini-n{font-size:20px;font-weight:600;letter-spacing:-0.01em}
+.mini-l{font-size:10px;color:var(--t3);margin-top:1px}
+.insight{font-size:11px;color:var(--t2);line-height:1.6;padding:.6rem .75rem;background:var(--bg);border-radius:6px}
 
-.results-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
-.rp-title{font-size:13px;font-weight:600;margin-bottom:1.25rem}
-.big-result{text-align:center;padding:1.5rem 0;border-bottom:1px solid var(--border);margin-bottom:1.25rem}
-.br-num{font-size:56px;font-weight:600;letter-spacing:-0.03em;line-height:1}
-.br-label{font-size:12px;color:var(--text3);margin-top:4px}
-.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
-.ms{text-align:center;padding:0.75rem;background:var(--surface2);border-radius:6px}
-.ms-n{font-size:22px;font-weight:600;letter-spacing:-0.01em}
-.ms-l{font-size:11px;color:var(--text3);margin-top:2px}
-.rp-insight{font-size:12px;color:var(--text2);line-height:1.6;padding:10px 12px;background:var(--surface2);border-radius:6px}
+/* RANKER */
+.rk{display:grid;grid-template-columns:220px 1fr;gap:1px;background:var(--b);border:1px solid var(--b);border-radius:8px;overflow:hidden;min-height:480px}
+.rk-side{background:var(--surf)}
+.rk-head{font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;padding:10px 12px;border-bottom:1px solid var(--b);background:var(--bg)}
+.ci{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--b);cursor:pointer;transition:background .1s}
+.ci:last-child{border-bottom:none}
+.ci:hover{background:var(--bg)}
+.ci.on{background:#eff6ff;border-left:2px solid var(--blue)}
+.ci-name{font-size:12px;font-weight:500}
+.ci-reg{font-size:10px;color:var(--t3)}
+.pip{font-size:10px;font-weight:500;padding:2px 6px;border-radius:3px}
 
-/* ── RANKER ── */
-.ranker-wrap{display:grid;grid-template-columns:240px 1fr;gap:1rem;min-height:520px}
-.rk-list{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.rk-list-head{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)}
-.rk-item{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s}
-.rk-item:last-child{border-bottom:none}
-.rk-item:hover{background:var(--surface2)}
-.rk-item.on{background:#eff6ff;border-left:2px solid var(--accent)}
-.rki-name{font-size:13px;font-weight:500}
-.rki-reg{font-size:11px;color:var(--text3)}
-.rk-pip{font-size:11px;font-weight:500;padding:2px 7px;border-radius:4px}
+.rk-det{background:var(--surf);padding:1.5rem}
+.det-name{font-size:20px;font-weight:600;letter-spacing:-.01em;margin-bottom:2px}
+.det-meta{font-size:11px;color:var(--t3);margin-bottom:1.25rem}
+.attr-lbl{font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
+.ar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.ar-name{font-size:11px;color:var(--t2);width:130px;flex-shrink:0}
+.ar-track{flex:1;height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.ar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+.ar-val{font-size:11px;font-weight:500;width:28px;text-align:right}
+.verdict{margin-top:1rem;font-size:12px;color:var(--t2);line-height:1.6;padding:.75rem;background:var(--bg);border-radius:6px}
+.research{margin-top:.6rem;font-size:11px;color:var(--blue);line-height:1.5;padding:.6rem .75rem;border:1px dashed #bfdbfe;border-radius:6px}
+.research::before{content:'↗ ';font-weight:600}
 
-.rk-detail{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
-.rkd-top{display:flex;align-items:baseline;gap:1rem;margin-bottom:4px}
-.rkd-name{font-size:22px;font-weight:600;letter-spacing:-0.01em}
-.rkd-wacc{font-size:14px;color:var(--text3)}
-.rkd-sub{font-size:12px;color:var(--text3);margin-bottom:1.5rem}
-.attr-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px}
-.attr-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.attr-name{font-size:12px;color:var(--text2);width:140px;flex-shrink:0}
-.attr-track{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
-.attr-fill{height:100%;border-radius:3px;transition:width 0.4s ease}
-.attr-val{font-size:12px;font-weight:500;width:32px;text-align:right}
-.rkd-verdict{margin-top:1.25rem;padding:12px 14px;background:var(--surface2);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.6}
-.rkd-verdict strong{color:var(--text);font-weight:500}
-.rkd-research{margin-top:10px;padding:10px 14px;border:1px dashed var(--border2);border-radius:6px;font-size:12px;color:var(--accent);line-height:1.6}
-.rkd-research::before{content:'↗ Research angle: ';font-weight:500}
+/* METH */
+.meth{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.mc{background:var(--surf);border:1px solid var(--b);border-radius:8px;padding:1.1rem}
+.mc-step{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.mc-title{font-size:13px;font-weight:600;margin-bottom:5px}
+.mc-body{font-size:12px;color:var(--t2);line-height:1.55}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:.6rem}
+.chip{font-size:10px;padding:2px 7px;border-radius:3px;background:var(--bg);color:var(--t2);border:1px solid var(--b)}
+.qs{background:var(--surf);border:1px solid var(--b);border-radius:8px;padding:1.1rem;margin-top:1rem}
+.qs-title{font-size:12px;font-weight:600;margin-bottom:.6rem}
+.q{font-size:12px;color:var(--t2);line-height:1.7;padding:.35rem 0;border-bottom:1px solid var(--b)}
+.q:last-child{border-bottom:none}
+.q::before{content:attr(data-n)' ';color:var(--t3);font-size:11px}
 
-/* ── METHODOLOGY ── */
-.meth-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.meth-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem}
-.mc-step{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:8px}
-.mc-title{font-size:14px;font-weight:600;margin-bottom:6px}
-.mc-body{font-size:12px;color:var(--text2);line-height:1.6}
-.mc-data{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-size:11px;padding:3px 8px;border-radius:4px;background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+.ph{font-size:20px;font-weight:600;letter-spacing:-.01em;margin-bottom:.3rem}
+.ps{font-size:12px;color:var(--t2);margin-bottom:1.25rem}
 
-.section-title{font-size:20px;font-weight:600;letter-spacing:-0.01em;margin-bottom:4px}
-.section-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
-
-@media(max-width:700px){
-  .ov-top,.gap-grid,.ranker-wrap,.meth-grid,.three-grid{grid-template-columns:1fr}
-  .ov-headline{font-size:26px}
-  .br-num{font-size:40px}
+@media(max-width:680px){
+  .ov-grid,.gap-grid,.rk,.meth,.three{grid-template-columns:1fr}
+  .ov-left h1{font-size:22px}
+  .big-n{font-size:38px}
+  .nav-r{display:none}
 }
 </style>
 </head>
 <body>
 
 <nav>
-  <span class="nav-brand">CoC × Renewables <span>/ Arun, STS 2026</span></span>
-  <div class="nav-links">
-    <button class="navl on" onclick="go(0,this)">Overview</button>
-    <button class="navl" onclick="go(1,this)">Gap Model</button>
-    <button class="navl" onclick="go(2,this)">Country Ranker</button>
-    <button class="navl" onclick="go(3,this)">Methodology</button>
+  <span class="brand">CoC × RES <span>/ Arun · STS 2026</span></span>
+  <div class="tabs">
+    <button class="tab on" onclick="go(0,this)">Overview</button>
+    <button class="tab" onclick="go(1,this)">Gap Model</button>
+    <button class="tab" onclick="go(2,this)">Country Ranker</button>
+    <button class="tab" onclick="go(3,this)">Methodology</button>
   </div>
-  <span class="nav-cite">Extending Calcaterra et al., <em>Nature Energy</em> 2024</span>
+  <span class="nav-r">Extending Calcaterra et al., <em>Nature Energy</em> 2024</span>
 </nav>
 
-<!-- ══ PAGE 0: OVERVIEW ══ -->
-<div class="page on" id="p0">
-<div class="wrap">
-  <div class="ov-top">
-    <div>
-      <h1 class="ov-headline">Finance, not physics,<br>is <em>why renewables stall.</em></h1>
-      <p class="ov-body">Calcaterra et al. (2024) showed that converging the cost of capital from high-CoC countries (Africa, LatAm, MENA) to OECD levels fills ~30% of the NDC→1.5°C renewable electricity gap — using an ensemble of 5 integrated assessment models.</p>
-      <p class="ov-body">Their result is modeled. <strong>We want to test it empirically</strong> — using 6,200+ real project finance transactions from the World Bank PPI database to reconstruct WACC series at the deal level and run the same regression in actual data.</p>
-      <div class="ov-ask">
+<!-- ══ OVERVIEW ══ -->
+<div class="page on" id="p0"><div class="wrap">
+  <div class="ov-grid">
+    <div class="ov-left">
+      <h1>Finance, not physics,<br>is <em>why renewables stall.</em></h1>
+      <p>Calcaterra et al. (2024) showed CoC convergence fills ~30% of the NDC→1.5°C gap across 5 IAMs. That result is modeled. We want to test it in actual project finance data.</p>
+      <p style="font-size:12px;color:var(--t2)">6,200+ World Bank PPI transactions · WACC reconstructed deal-level · Panel regression across country-technology-year</p>
+      <div class="ask">
         <strong>What we're asking</strong>
-        Does the CoC → renewable deployment relationship hold in transaction-level data? Which countries have CoC as the <em>binding</em> constraint vs. grid, policy, or resource limits? And can we build a ranked map of where de-risking instruments have the highest marginal impact?
+        Which countries have CoC as the <em>binding</em> constraint vs. grid, policy, or resource? Can we build a prioritization map for de-risking instruments?
       </div>
     </div>
-
     <div class="scatter-card">
-      <div class="sc-head">
-        <span class="sc-title">CoC spread vs. renewable deployment gap</span>
-        <span class="sc-sub">by country, 2023</span>
-      </div>
-      <p class="sc-note">WACC values from Calcaterra et al. Extended Data Fig. 1 + Damodaran country risk premia. Deployment gap = actual capacity vs. resource-potential benchmark (IRENA).</p>
-      <div class="chart-box"><canvas id="ovScatter" role="img" aria-label="Scatter plot of CoC spread vs renewable deployment gap by country"></canvas></div>
+      <div class="card-top"><span class="card-title">CoC spread vs. deployment gap</span><span class="card-sub">28 countries · 2023</span></div>
+      <p class="card-note">WACC values from Calcaterra et al. Extended Data Fig. 1. Purple = outliers that break the simple story.</p>
+      <div class="cbox"><canvas id="sc1" role="img" aria-label="Scatter of CoC spread vs renewable deployment gap by country"></canvas></div>
     </div>
   </div>
-
-  <div class="three-grid">
-    <div class="tg-card">
-      <div class="tg-label">Our core question</div>
-      <div class="tg-num" style="color:var(--accent)">Where?</div>
-      <div class="tg-body">Your paper shows CoC convergence works on average. We want to know which specific country-technology pairs have CoC as the primary binding constraint — moving from regional averages to deal-level resolution.</div>
-    </div>
-    <div class="tg-card">
-      <div class="tg-label">Novel contribution</div>
-      <div class="tg-num" style="color:var(--green)">Bottom-up</div>
-      <div class="tg-body">Your ensemble uses IAM model outputs. We reconstruct the WACC → deployment relationship from 6,200+ World Bank PPI transactions — a complementary empirical validation from real project finance data.</div>
-    </div>
-    <div class="tg-card">
-      <div class="tg-label">Research timeline</div>
-      <div class="tg-num" style="color:var(--orange)">Summer '26</div>
-      <div class="tg-body">Data cleaning + WACC reconstruction (June–July). Panel regression across country-technology-year (August). Write-up targeting Science Talent Search (September–October). We'd love your input at any stage.</div>
-    </div>
+  <div class="three">
+    <div class="tc"><div class="tc-l">Core question</div><div class="tc-n" style="color:var(--blue)">Where?</div><div class="tc-b">Your paper shows convergence works on average. We find exactly which country-technology pairs are most constrained by financing.</div></div>
+    <div class="tc"><div class="tc-l">Contribution</div><div class="tc-n" style="color:var(--green)">Bottom-up</div><div class="tc-b">IAM outputs → real deal-level transactions. Complementary empirical validation using the same WACC decomposition you published.</div></div>
+    <div class="tc"><div class="tc-l">Timeline</div><div class="tc-n" style="color:var(--orange)">Summer '25</div><div class="tc-b">Data + WACC reconstruction June–July. Panel regression August. STS write-up September. Would love input at any stage.</div></div>
   </div>
-</div>
-</div>
+</div></div>
 
-<!-- ══ PAGE 1: GAP MODEL ══ -->
-<div class="page" id="p1">
-<div class="wrap">
-  <div class="section-title">CoC convergence gap model</div>
-  <p class="section-sub">Reproducing the Calcaterra et al. Fig. 1d result. Adjust parameters to see how much of the NDC→1.5°C renewable gap gets filled under different convergence scenarios.</p>
-
+<!-- ══ GAP MODEL ══ -->
+<div class="page" id="p1"><div class="wrap">
+  <div class="ph">CoC convergence gap model</div>
+  <p class="ps">Reproducing Calcaterra et al. Fig. 1d. Adjust parameters to see how much of the NDC→1.5°C gap gets filled.</p>
   <div class="gap-grid">
-    <div class="controls">
-      <div class="ctrl-title">Scenario parameters</div>
-
-      <div class="ctrl-row">
-        <div class="ctrl-lbl"><span>Convergence year</span><span id="cv1">2050</span></div>
+    <div class="panel">
+      <div class="panel-title">Parameters</div>
+      <div class="ctrl">
+        <div class="ctrl-lbl"><span>Convergence year</span><b id="cv1">2050</b></div>
         <input type="range" id="sl1" min="2035" max="2075" value="2050" step="5" oninput="calcGap()">
       </div>
-
-      <div class="ctrl-row">
-        <div class="ctrl-lbl"><span>Risk spillover to OECD</span><span id="cv2">0%</span></div>
+      <div class="ctrl">
+        <div class="ctrl-lbl"><span>Risk spillover to OECD</span><b id="cv2">0%</b></div>
         <input type="range" id="sl2" min="0" max="2" value="0" step="0.5" oninput="calcGap()">
       </div>
-
-      <div class="ctrl-row">
-        <div class="ctrl-lbl"><span>Climate scenario</span><span></span></div>
+      <div class="ctrl">
+        <div class="ctrl-lbl"><span>Climate scenario</span></div>
         <div class="seg">
-          <button class="seg-opt" onclick="setSc(0,this)">NDC only</button>
-          <button class="seg-opt on" onclick="setSc(1,this)">NDC+1.5°C</button>
-          <button class="seg-opt" onclick="setSc(2,this)">1.5°C only</button>
+          <button class="so" onclick="setSc(0,this)">NDC</button>
+          <button class="so on" onclick="setSc(1,this)">NDC+1.5°C</button>
+          <button class="so" onclick="setSc(2,this)">1.5°C</button>
         </div>
       </div>
-
-      <div class="ctrl-row">
-        <div class="ctrl-lbl"><span>Focus region</span><span></span></div>
-        <div class="seg" style="margin-top:8px">
-          <button class="seg-opt on" onclick="setReg(0,this)">All high-CoC</button>
-          <button class="seg-opt" onclick="setReg(1,this)">Africa</button>
-          <button class="seg-opt" onclick="setReg(2,this)">LatAm</button>
-          <button class="seg-opt" onclick="setReg(3,this)">S. Asia</button>
+      <div class="ctrl">
+        <div class="ctrl-lbl"><span>Region focus</span></div>
+        <div class="seg">
+          <button class="so on" onclick="setReg(0,this)">All</button>
+          <button class="so" onclick="setReg(1,this)">Africa</button>
+          <button class="so" onclick="setReg(2,this)">LatAm</button>
+          <button class="so" onclick="setReg(3,this)">S. Asia</button>
         </div>
       </div>
     </div>
-
-    <div class="results-panel">
-      <div class="rp-title">Model output</div>
-      <div class="big-result">
-        <div class="br-num" id="br-main" style="color:var(--accent)">30%</div>
-        <div class="br-label">of NDC → 1.5°C renewable gap filled by CoC convergence</div>
+    <div class="panel">
+      <div class="panel-title">Output</div>
+      <div class="big-n"><span id="br" style="color:var(--blue)">30%</span></div>
+      <div class="mini4">
+        <div class="mini"><div class="mini-n" id="m1" style="color:var(--green)">10%</div><div class="mini-l">Fossil gap filled</div></div>
+        <div class="mini"><div class="mini-n" id="m2" style="color:var(--orange)">10%</div><div class="mini-l">Price drop</div></div>
+        <div class="mini"><div class="mini-n" id="m3" style="color:var(--purple)">~4pp</div><div class="mini-l">CoC reduction</div></div>
+        <div class="mini"><div class="mini-n" id="m4" style="color:var(--red)">5%</div><div class="mini-l">Energy/GDP saved</div></div>
       </div>
-      <div class="mini-stats">
-        <div class="ms"><div class="ms-n" id="ms1" style="color:var(--green)">10%</div><div class="ms-l">Fossil phase-out gap</div></div>
-        <div class="ms"><div class="ms-n" id="ms2" style="color:var(--orange)">10%</div><div class="ms-l">Electricity price drop</div></div>
-        <div class="ms"><div class="ms-n" id="ms3" style="color:var(--purple)">~4pp</div><div class="ms-l">CoC reduction</div></div>
-        <div class="ms"><div class="ms-n" id="ms4" style="color:var(--red)">5%</div><div class="ms-l">Energy spend / GDP</div></div>
-      </div>
-      <div class="rp-insight" id="rp-ins">Median across 5 IAMs. Convergence to OECD CoC levels by 2050 under NDC+1.5°C scenario fills 30% of the renewable electricity gap in high-CoC countries.</div>
+      <div class="insight" id="ins">Median across 5 IAMs. 2050 convergence under NDC+1.5°C fills 30% of the renewable gap in high-CoC countries.</div>
     </div>
   </div>
-</div>
-</div>
+</div></div>
 
-<!-- ══ PAGE 2: RANKER ══ -->
-<div class="page" id="p2">
-<div class="wrap">
-  <div class="section-title">Binding constraint ranker</div>
-  <p class="section-sub">Our core extension: disaggregating your 3 macro-regions into country-level binding constraint attribution. CoC vs. grid vs. policy vs. resource — where is financing actually the bottleneck?</p>
-
-  <div class="ranker-wrap">
-    <div class="rk-list">
-      <div class="rk-list-head">Countries</div>
-      <div id="rklist"></div>
+<!-- ══ RANKER ══ -->
+<div class="page" id="p2"><div class="wrap">
+  <div class="ph">Binding constraint ranker</div>
+  <p class="ps">Our core extension: country-level attribution — how much of the deployment gap is CoC vs. other barriers?</p>
+  <div class="rk">
+    <div class="rk-side">
+      <div class="rk-head">Countries</div>
+      <div id="clist"></div>
     </div>
-    <div class="rk-detail" id="rkdetail">
-      <div class="rkd-top"><span class="rkd-name">Select a country</span></div>
-    </div>
+    <div class="rk-det" id="rdet"><div class="det-name" style="color:var(--t3)">←</div></div>
   </div>
-</div>
-</div>
+</div></div>
 
-<!-- ══ PAGE 3: METHODOLOGY ══ -->
-<div class="page" id="p3">
-<div class="wrap">
-  <div class="section-title">Research methodology</div>
-  <p class="section-sub">How we extend Calcaterra et al. from IAM outputs to transaction-level empirics. Four steps, all public data.</p>
-
-  <div class="meth-grid">
-    <div class="meth-card">
-      <div class="mc-step">Step 01</div>
-      <div class="mc-title">Reconstruct deal-level WACC</div>
-      <div class="mc-body">Apply Calcaterra et al.'s WACC decomposition (equations 3–4) to individual transactions in the World Bank PPI database. Each deal gets a country risk component (Damodaran default spread), technology risk component (maturity threshold approach), and infrastructure premium — yielding a deal-level WACC estimate we can validate against reported financing terms.</div>
-      <div class="mc-data">
-        <span class="chip">WB PPI database</span>
-        <span class="chip">Damodaran risk premia</span>
-        <span class="chip">6,200+ transactions</span>
-      </div>
-    </div>
-
-    <div class="meth-card">
-      <div class="mc-step">Step 02</div>
-      <div class="mc-title">Measure deployment gap</div>
-      <div class="mc-body">Construct a country-technology-year deployment gap measure: actual capacity additions (IRENA) vs. resource-potential benchmark, controlling for wind speed / solar irradiance (Global Solar Atlas, IRENA) so CoC signal isn't confounded by geography. This gives us a dependent variable that isolates financing constraint from physical constraint.</div>
-      <div class="mc-data">
-        <span class="chip">IRENA capacity stats</span>
-        <span class="chip">Global Solar Atlas</span>
-        <span class="chip">GWA wind data</span>
-      </div>
-    </div>
-
-    <div class="meth-card">
-      <div class="mc-step">Step 03</div>
-      <div class="mc-title">Panel regression</div>
-      <div class="mc-body">Country-technology-year panel regression: deployment gap ~ WACC spread + grid quality index (World Bank) + carbon price + political risk (ICRG) + technology maturity FE. Key test: is the CoC coefficient robust and economically meaningful after controls? Does it match the ~30% gap-fill magnitude implied by the IAM ensemble?</div>
-      <div class="mc-data">
-        <span class="chip">Panel OLS / 2SLS</span>
-        <span class="chip">ICRG political risk</span>
-        <span class="chip">WB governance</span>
-      </div>
-    </div>
-
-    <div class="meth-card">
-      <div class="mc-step">Step 04</div>
-      <div class="mc-title">Binding constraint map</div>
-      <div class="mc-body">Use regression coefficients to decompose each country's deployment gap into CoC vs. other barriers. Produce a ranked map: which country-technology pairs have CoC elasticity above threshold (i.e., where de-risking instruments have highest marginal impact)? This is the policy-actionable output — a prioritization tool for MDBs and DFIs.</div>
-      <div class="mc-data">
-        <span class="chip">Constraint decomposition</span>
-        <span class="chip">MDB policy relevance</span>
-        <span class="chip">Prioritization map</span>
-      </div>
-    </div>
+<!-- ══ METHODOLOGY ══ -->
+<div class="page" id="p3"><div class="wrap">
+  <div class="ph">Methodology</div>
+  <p class="ps">Four steps. All public data. Directly extending your WACC decomposition to the deal level.</p>
+  <div class="meth">
+    <div class="mc"><div class="mc-step">01</div><div class="mc-title">Deal-level WACC reconstruction</div><div class="mc-body">Apply equations 3–4 from your paper to each WB PPI transaction. Country risk (Damodaran default spread) + tech risk (maturity thresholds) + infrastructure premium → deal-level WACC estimate.</div><div class="chips"><span class="chip">WB PPI 6,200+ deals</span><span class="chip">Damodaran risk premia</span><span class="chip">1990–2023</span></div></div>
+    <div class="mc"><div class="mc-step">02</div><div class="mc-title">Deployment gap measure</div><div class="mc-body">Actual capacity additions (IRENA) vs. resource-potential benchmark controlling for irradiance/wind speed. Isolates financing constraint from physical geography.</div><div class="chips"><span class="chip">IRENA capacity stats</span><span class="chip">Global Solar Atlas</span><span class="chip">GWA wind data</span></div></div>
+    <div class="mc"><div class="mc-step">03</div><div class="mc-title">Panel regression</div><div class="mc-body">Deployment gap ~ WACC spread + grid quality + carbon price + political risk + tech FE. Tests whether CoC coefficient matches your ~30% gap-fill estimate.</div><div class="chips"><span class="chip">Panel OLS / 2SLS</span><span class="chip">ICRG political risk</span><span class="chip">WB governance</span></div></div>
+    <div class="mc"><div class="mc-step">04</div><div class="mc-title">Binding constraint map</div><div class="mc-body">Decompose each country's gap into CoC vs. other barriers. Rank country-technology pairs by CoC elasticity → prioritization map for MDBs and DFIs.</div><div class="chips"><span class="chip">Constraint decomposition</span><span class="chip">MDB policy tool</span><span class="chip">Country × tech map</span></div></div>
   </div>
-
-  <div style="margin-top:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem">
-    <div style="font-size:13px;font-weight:600;margin-bottom:8px">Questions for your team</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.8">
-      1. Does the WB PPI database have sufficient financing detail to reconstruct WACC at deal level, or are reported terms too sparse for certain regions?<br>
-      2. Your WACC decomposition uses 2018 as a base year — would you recommend a different anchor for a 1990–2023 panel?<br>
-      3. Are there country-technology pairs in your Zenodo data where model results diverge most sharply? Those seem like the most interesting cases to test empirically.<br>
-      4. Would any co-authors be interested in advising on the econometric specification?
-    </div>
+  <div class="qs">
+    <div class="qs-title">Questions for your team</div>
+    <div class="q" data-n="1.">Does WB PPI have sufficient financing detail for deal-level WACC reconstruction, or are reported terms too sparse in certain regions?</div>
+    <div class="q" data-n="2.">Your decomposition uses 2018 as base year — right anchor for a 1990–2023 panel?</div>
+    <div class="q" data-n="3.">Which country-technology pairs in your Zenodo data show the most divergent model results? Those seem like the most interesting empirical tests.</div>
+    <div class="q" data-n="4.">Would any co-authors be open to advising on the econometric specification?</div>
   </div>
-</div>
-</div>
+</div></div>
 
 <script>
-// NAV
 function go(n,btn){
   document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('on',i===n));
-  document.querySelectorAll('.navl').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
 }
 
-// ── OVERVIEW SCATTER ──
-// Real WACC values from Calcaterra et al. Extended Data Fig. 1 + paper body
-// Deployment gap = illustrative but directionally accurate from IRENA/IEA public data
-const scatterData = [
-  // Africa / high CoC
-  {label:'Nigeria',    x:8.1, y:78, r:9,  col:'#dc2626'},
-  {label:'Kenya',      x:7.3, y:71, r:7,  col:'#dc2626'},
-  {label:'Ethiopia',   x:7.8, y:82, r:6,  col:'#dc2626'},
-  {label:'Tanzania',   x:7.5, y:76, r:5,  col:'#dc2626'},
-  {label:'Ghana',      x:6.9, y:69, r:6,  col:'#dc2626'},
-  {label:'Morocco',    x:5.8, y:52, r:8,  col:'#ea580c'},
-  {label:'Egypt',      x:6.1, y:61, r:9,  col:'#ea580c'},
-  // LatAm
-  {label:'Colombia',   x:5.4, y:55, r:8,  col:'#ea580c'},
-  {label:'Brazil',     x:4.9, y:44, r:12, col:'#ea580c'},
-  {label:'Argentina',  x:6.2, y:63, r:7,  col:'#ea580c'},
-  {label:'Peru',       x:5.1, y:50, r:6,  col:'#ea580c'},
-  {label:'Chile',      x:3.3, y:28, r:7,  col:'#ca8a04'},
-  // South / SE Asia
-  {label:'India',      x:4.2, y:41, r:14, col:'#ca8a04'},
-  {label:'Indonesia',  x:4.6, y:49, r:10, col:'#ca8a04'},
-  {label:'Vietnam',    x:4.8, y:53, r:8,  col:'#ca8a04'},
-  {label:'Pakistan',   x:5.6, y:60, r:7,  col:'#ea580c'},
-  {label:'Bangladesh', x:5.9, y:65, r:6,  col:'#ea580c'},
-  // Mid CoC
-  {label:'China',      x:2.7, y:18, r:16, col:'#2563eb'},
-  {label:'Thailand',   x:3.1, y:22, r:7,  col:'#2563eb'},
-  {label:'Malaysia',   x:2.4, y:15, r:7,  col:'#2563eb'},
-  // Low CoC
-  {label:'Germany',    x:0.8, y:5,  r:10, col:'#16a34a'},
-  {label:'France',     x:0.7, y:4,  r:9,  col:'#16a34a'},
-  {label:'USA',        x:0.2, y:3,  r:13, col:'#16a34a'},
-  {label:'Australia',  x:0.6, y:6,  r:8,  col:'#16a34a'},
-  {label:'Japan',      x:1.1, y:9,  r:9,  col:'#16a34a'},
-  {label:'S. Korea',   x:1.4, y:11, r:8,  col:'#16a34a'},
-  // interesting outliers
-  {label:'Costa Rica', x:3.8, y:10, r:5,  col:'#7c3aed'}, // low gap despite high CoC
-  {label:'Jordan',     x:5.2, y:22, r:5,  col:'#7c3aed'}, // relatively low gap
+// SCATTER
+const sd=[
+  {l:'Nigeria',   x:8.1,y:78,c:'#dc2626'},{l:'Kenya',    x:7.3,y:71,c:'#dc2626'},
+  {l:'Ethiopia',  x:7.8,y:82,c:'#dc2626'},{l:'Ghana',    x:6.9,y:69,c:'#dc2626'},
+  {l:'Morocco',   x:5.8,y:52,c:'#ea580c'},{l:'Egypt',    x:6.1,y:61,c:'#ea580c'},
+  {l:'Colombia',  x:5.4,y:55,c:'#ea580c'},{l:'Brazil',   x:4.9,y:44,c:'#ea580c'},
+  {l:'Argentina', x:6.2,y:63,c:'#ea580c'},{l:'Chile',    x:3.3,y:28,c:'#ca8a04'},
+  {l:'India',     x:4.2,y:41,c:'#ca8a04'},{l:'Indonesia',x:4.6,y:49,c:'#ca8a04'},
+  {l:'Vietnam',   x:4.8,y:53,c:'#ca8a04'},{l:'Pakistan', x:5.6,y:60,c:'#ea580c'},
+  {l:'China',     x:2.7,y:18,c:'#2563eb'},{l:'Thailand', x:3.1,y:22,c:'#2563eb'},
+  {l:'Germany',   x:0.8,y:5, c:'#16a34a'},{l:'France',   x:0.7,y:4, c:'#16a34a'},
+  {l:'USA',       x:0.2,y:3, c:'#16a34a'},{l:'Japan',    x:1.1,y:9, c:'#16a34a'},
+  {l:'S. Korea',  x:1.4,y:11,c:'#16a34a'},{l:'Australia',x:0.6,y:6, c:'#16a34a'},
+  {l:'Costa Rica',x:3.8,y:10,c:'#7c3aed'},{l:'Jordan',   x:5.2,y:22,c:'#7c3aed'},
+  {l:'Malaysia',  x:2.4,y:15,c:'#2563eb'},{l:'Poland',   x:1.8,y:14,c:'#16a34a'},
+  {l:'Tanzania',  x:7.5,y:76,c:'#dc2626'},{l:'Peru',     x:5.1,y:50,c:'#ea580c'},
 ];
-
-new Chart(document.getElementById('ovScatter').getContext('2d'),{
+new Chart(document.getElementById('sc1').getContext('2d'),{
   type:'bubble',
   data:{datasets:[{
-    data: scatterData.map(d=>({x:d.x,y:d.y,r:Math.max(4,d.r*0.7)})),
-    backgroundColor: scatterData.map(d=>d.col+'44'),
-    borderColor: scatterData.map(d=>d.col),
-    borderWidth:1.5,
+    data:sd.map(d=>({x:d.x,y:d.y,r:5})),
+    backgroundColor:sd.map(d=>d.c+'55'),
+    borderColor:sd.map(d=>d.c),
+    borderWidth:1.5
   }]},
   options:{
     responsive:true,maintainAspectRatio:false,
-    plugins:{
-      legend:{display:false},
-      tooltip:{callbacks:{label:(ctx)=>{
-        const d=scatterData[ctx.dataIndex];
-        return `${d.label}: WACC +${d.x}%, gap ${d.y}%`;
-      }}}
-    },
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>{const d=sd[ctx.dataIndex];return`${d.l}: +${d.x}% CoC, ${d.y}% gap`;}}}},
     scales:{
-      x:{title:{display:true,text:'CoC spread above OECD baseline (%)',font:{size:11,family:'Inter'}},
-         min:0,max:9.5,grid:{color:'rgba(0,0,0,0.05)'},
-         ticks:{font:{size:11,family:'Inter'},callback:v=>'+'+v+'%'}},
-      y:{title:{display:true,text:'Renewable deployment gap (% of resource potential)',font:{size:11,family:'Inter'}},
-         min:0,max:95,grid:{color:'rgba(0,0,0,0.05)'},
-         ticks:{font:{size:11,family:'Inter'},callback:v=>v+'%'}}
+      x:{title:{display:true,text:'CoC spread above OECD (%)',font:{size:11,family:'Inter'}},min:0,max:9.5,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11,family:'Inter'},callback:v=>'+'+v+'%'}},
+      y:{title:{display:true,text:'Renewable deployment gap (%)',font:{size:11,family:'Inter'}},min:0,max:92,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11,family:'Inter'},callback:v=>v+'%'}}
     }
   }
 });
 
-// ── GAP MODEL ──
-let sc=1,reg=0;
-const insightMap={
-  '2035_0_1':'Aggressive convergence by 2035 under NDC+1.5°C could fill 42% of the renewable gap — requires immediate coordinated MDB action. Models range 17–69%.',
-  '2050_0_1':'Median across 5 IAMs (GCAM, IMACLIM, IMAGE, TIAM, WITCH). 30% gap fill, 10% fossil phase-out, ~10% electricity price reduction in high-CoC countries.',
-  '2075_0_1':'Delayed convergence captures only ~18%. Most of the value of de-risking is front-loaded — acting by 2040 matters far more than the final target level.',
-  '2035_0_0':'Under NDC-only ambition, early CoC convergence is even more powerful — filling ~40% of the smaller but still significant gap.',
-  '2050_0_0':'NDC-only scenario: 30% renewable gap filled, with larger relative fossil fuel reduction than under 1.5°C (where carbon pricing does most of that work).',
-  '2050_1_1':'With 1% risk spillover to EU/US, magnitude is reduced ~15% but direction holds. Net benefit to developing world still strongly positive per Calcaterra et al. sensitivity analysis.',
-  '2050_0_2':'Under 1.5°C-only, CoC convergence mainly reduces mitigation cost rather than boosting raw renewables — carbon budget forces decarbonization regardless.',
+// GAP MODEL
+let sc=1,rg=0;
+const ins={
+  '2035_0_1':'Aggressive 2035 convergence could fill 42% of the gap — requires immediate MDB action. Model range: 17–69%.',
+  '2050_0_1':'Median across 5 IAMs. 30% renewable gap filled, 10% fossil phase-out, ~10% electricity price reduction.',
+  '2075_0_1':'Delayed to 2075: only ~18% filled. Most value is front-loaded — acting by 2040 matters most.',
+  '2050_0_0':'NDC-only: 30% renewable gap filled, larger relative fossil reduction vs. 1.5°C (where carbon price does that work).',
+  '2050_1_1':'1% OECD risk spillover reduces magnitude ~15% but direction holds. Net benefit to developing world still strongly positive.',
+  '2050_0_2':'Under 1.5°C-only: CoC convergence mainly reduces mitigation cost — carbon budget forces decarbonization regardless.',
 };
-function setSc(n,btn){sc=n;document.querySelectorAll('.seg').forEach(s=>{});btn.parentElement.querySelectorAll('.seg-opt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');calcGap();}
-function setReg(n,btn){reg=n;btn.parentElement.querySelectorAll('.seg-opt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');calcGap();}
+function setSc(n,b){sc=n;b.parentElement.querySelectorAll('.so').forEach(x=>x.classList.remove('on'));b.classList.add('on');calcGap();}
+function setReg(n,b){rg=n;b.parentElement.querySelectorAll('.so').forEach(x=>x.classList.remove('on'));b.classList.add('on');calcGap();}
 function calcGap(){
-  const yr=+document.getElementById('sl1').value;
-  const sp=+document.getElementById('sl2').value;
+  const yr=+document.getElementById('sl1').value,sp=+document.getElementById('sl2').value;
   document.getElementById('cv1').textContent=yr;
   document.getElementById('cv2').textContent=sp.toFixed(1)+'%';
-  const yf=Math.max(0.42,1-(yr-2035)/95);
-  const sf=sp>0?Math.max(0.72,1-sp*0.14):1;
-  const cf=sc===0?1.28:sc===1?1.0:0.32;
-  const regf=[1.0,1.18,0.95,0.88][reg];
-  const res=Math.min(69,Math.round(30*yf*sf*cf*regf));
-  const fos=Math.min(38,Math.round(10*yf*sf*cf*regf));
-  const pr=Math.min(20,Math.round(10*yf*sf*cf));
-  const coc=Math.round(4*yf*sf*10)/10;
-  const esp=Math.round(5*yf*sf*cf*10)/10;
-  document.getElementById('br-main').textContent=res+'%';
-  document.getElementById('ms1').textContent=fos+'%';
-  document.getElementById('ms2').textContent=pr+'%';
-  document.getElementById('ms3').textContent='~'+coc+'pp';
-  document.getElementById('ms4').textContent=esp+'%';
-  const key=yr+'_'+Math.round(sp>0?1:0)+'_'+sc;
-  document.getElementById('rp-ins').textContent=insightMap[key]||`Convergence by ${yr} under ${['NDC only','NDC+1.5°C','1.5°C only'][sc]} fills ${res}% of the renewable gap. Fossil phase-out: ${fos}%. Electricity price reduction: ${pr}%.`;
+  const yf=Math.max(0.42,1-(yr-2035)/95),sf=sp>0?Math.max(0.72,1-sp*.14):1,cf=sc===0?1.28:sc===1?1:.32,rf=[1,1.18,.95,.88][rg];
+  const res=Math.min(69,Math.round(30*yf*sf*cf*rf)),fos=Math.min(38,Math.round(10*yf*sf*cf*rf)),pr=Math.min(20,Math.round(10*yf*sf*cf));
+  document.getElementById('br').textContent=res+'%';
+  document.getElementById('m1').textContent=fos+'%';
+  document.getElementById('m2').textContent=pr+'%';
+  document.getElementById('m3').textContent='~'+Math.round(4*yf*sf*10)/10+'pp';
+  document.getElementById('m4').textContent=Math.round(5*yf*sf*cf*10)/10+'%';
+  const k=yr+'_'+Math.round(sp>0?1:0)+'_'+sc;
+  document.getElementById('ins').textContent=ins[k]||`Convergence by ${yr} fills ${res}% of the renewable gap, ${fos}% fossil phase-out.`;
 }
 
-// ── RANKER ──
-const countries=[
-  {name:'Nigeria',region:'Sub-Saharan Africa',wacc:8.1,pip:'#dc2626',pipbg:'#fef2f2',
-   b:{coc:72,grid:15,policy:8,resource:5},
-   v:'CoC is the primary binding constraint. Nigeria has world-class solar and onshore wind resources. The financing spread alone explains ~72% of the deployment gap.',
-   r:'Natural experiment: compare Nigerian solar deal terms pre/post the IFC Scaling Solar program — one of the few cases where MDB guarantee intervention is well-documented.'},
-  {name:'Kenya',region:'Sub-Saharan Africa',wacc:7.3,pip:'#dc2626',pipbg:'#fef2f2',
-   b:{coc:69,grid:20,policy:8,resource:3},
-   v:'Strongest CoC constraint in dataset alongside Nigeria. Lake Turkana wind and Olkaria geothermal show Kenya has resources — financing is the bottleneck.',
-   r:'Lake Turkana Wind Power project (310MW) had documented WACC of ~12% vs ~5% for comparable European projects. A case study in CoC as binding constraint.'},
-  {name:'Egypt',region:'MENA',wacc:6.1,pip:'#dc2626',pipbg:'#fef2f2',
-   b:{coc:65,grid:10,policy:18,resource:7},
-   v:'World-class solar resource (Benban solar park, 1.8GW). CoC spread is almost entirely country risk premium — not technology risk. Policy uncertainty is secondary.',
-   r:'Benban deal financing data is partially public. Cross-referencing with Damodaran Egypt risk premium could validate the country risk component decomposition.'},
-  {name:'Colombia',region:'Latin America',wacc:5.4,pip:'#ea580c',pipbg:'#fff7ed',
-   b:{coc:58,grid:22,policy:12,resource:8},
-   v:'CoC is primary but grid access in non-coastal regions is a meaningful second constraint. Rural transmission capacity limits where wind/solar can connect.',
-   r:'Compare coastal (Guajira wind corridor) vs. inland deployment rates. CoC is identical for both; grid access differs — this variation could isolate the grid constraint.'},
-  {name:'Vietnam',region:'SE Asia',wacc:4.8,pip:'#ea580c',pipbg:'#fff7ed',
-   b:{coc:61,grid:25,policy:9,resource:5},
-   v:'Offshore wind buildout rapidly constrained by both financing costs and grid connection. Strong resource base makes this a high-priority de-risking target.',
-   r:'Vietnam FiT policy changes (2021) created a natural experiment — deployment collapsed not because CoC changed but because policy uncertainty spiked. Good control case.'},
-  {name:'India',region:'South Asia',wacc:4.2,pip:'#ea580c',pipbg:'#fff7ed',
-   b:{coc:44,grid:18,policy:28,resource:10},
-   v:'Mixed constraint picture — CoC and policy/regulatory barriers are co-equal. State-level variation in DISCOMs (distribution companies) creates regulatory risk that rivals CoC.',
-   r:'State-level variation in India is our cleanest natural experiment: same national CoC, different state regulatory quality. Isolates policy constraint from financing constraint.'},
-  {name:'Brazil',region:'Latin America',wacc:4.9,pip:'#ea580c',pipbg:'#fff7ed',
-   b:{coc:48,grid:20,policy:24,resource:8},
-   v:'Brazil has large hydro base creating grid integration challenges for variable renewables. CoC explains ~48% of the gap; regulatory/auction design is meaningful second factor.',
-   r:'Brazil\'s PROINFA vs. auction regime comparison: auction design changes from 2009–2015 dramatically reduced LCOE. Quantifying this vs. concurrent CoC changes is interesting.'},
-  {name:'Chile',region:'Latin America',wacc:3.3,pip:'#ca8a04',pipbg:'#fefce8',
-   b:{coc:38,grid:30,policy:20,resource:12},
-   v:'CoC is one of three co-equal constraints. Atacama solar resource is world-class but transmission from north to load centers is the physical bottleneck.',
-   r:'Interesting outlier: lower CoC than peers but deployment gap partly persists. Decomposing why could test the limits of CoC-only explanations.'},
-  {name:'Costa Rica',region:'Latin America',wacc:3.8,pip:'#7c3aed',pipbg:'#f5f3ff',
-   b:{coc:15,grid:12,policy:8,resource:65},
-   v:'Outlier: high CoC spread but relatively low deployment gap. Why? Nearly 100% renewable electricity already from hydro/geothermal. Resource saturation, not financing, is the limit.',
-   r:'Costa Rica is a key control case — high CoC but low gap. Challenges a simple CoC → gap story and forces resource saturation into the model. Important for robustness.'},
-  {name:'Germany',region:'Europe',wacc:0.8,pip:'#16a34a',pipbg:'#f0fdf4',
-   b:{coc:10,grid:38,policy:30,resource:22},
-   v:'CoC is not the constraint. Grid congestion (north-south transmission), permitting timelines, and limited high-quality sites explain Germany\'s gap.',
-   r:'Germany as a "low-CoC control": its deployment gap is entirely explained by non-financing factors. Validates that our regression isn\'t picking up a general development effect.'},
+// RANKER
+const ctries=[
+  {n:'Nigeria',  r:'Sub-Saharan Africa',w:8.1,pc:'#dc2626',pb:'#fef2f2',b:{coc:72,grid:15,policy:8,resource:5},  v:'CoC is the binding constraint. World-class solar/wind resources — financing is the bottleneck.',          ra:'Compare deal terms pre/post IFC Scaling Solar — one of the best-documented MDB guarantee interventions.'},
+  {n:'Kenya',    r:'Sub-Saharan Africa',w:7.3,pc:'#dc2626',pb:'#fef2f2',b:{coc:69,grid:20,policy:8,resource:3},  v:'Strongest CoC signal in dataset. Lake Turkana wind (310MW) had WACC ~12% vs ~5% in comparable EU projects.',ra:'Lake Turkana project financing is partially public — ideal for deal-level WACC validation.'},
+  {n:'Egypt',    r:'MENA',             w:6.1,pc:'#dc2626',pb:'#fef2f2',b:{coc:65,grid:10,policy:18,resource:7}, v:'Benban solar park (1.8GW). CoC spread is almost entirely country risk — not technology risk.',           ra:'Benban deal data is partially public. Cross-reference with Damodaran Egypt risk premium.'},
+  {n:'Colombia', r:'Latin America',    w:5.4,pc:'#ea580c',pb:'#fff7ed',b:{coc:58,grid:22,policy:12,resource:8}, v:'CoC primary, grid second. Rural transmission capacity limits where renewables can connect.',            ra:'Coastal (Guajira wind) vs. inland rates — identical CoC, different grid access. Isolates grid constraint.'},
+  {n:'Vietnam',  r:'SE Asia',          w:4.8,pc:'#ea580c',pb:'#fff7ed',b:{coc:61,grid:25,policy:9,resource:5},  v:'Offshore wind hit by both financing costs and grid connection limits.',                               ra:'2021 FiT policy collapse = natural experiment. Deployment fell not because CoC changed but policy uncertainty spiked.'},
+  {n:'India',    r:'South Asia',       w:4.2,pc:'#ea580c',pb:'#fff7ed',b:{coc:44,grid:18,policy:28,resource:10},v:'Mixed — CoC and regulatory barriers co-equal. State DISCOM quality rivals CoC as constraint.',         ra:'State-level variation: same national CoC, different regulatory quality. Cleanest natural experiment in dataset.'},
+  {n:'Brazil',   r:'Latin America',    w:4.9,pc:'#ea580c',pb:'#fff7ed',b:{coc:48,grid:20,policy:24,resource:8}, v:'Large hydro base creates grid integration friction for variable renewables.',                          ra:'PROINFA vs. auction regime comparison: quantify auction design effect vs. concurrent CoC changes.'},
+  {n:'Costa Rica',r:'Latin America',   w:3.8,pc:'#7c3aed',pb:'#f5f3ff',b:{coc:15,grid:12,policy:8,resource:65},'v':'Outlier: high CoC spread but low gap. Already ~100% renewable via hydro/geothermal — resource saturation.',ra:'Key control case: high CoC, low gap. Challenges simple CoC → gap story. Important for model robustness.'},
+  {n:'Germany',  r:'Europe',           w:0.8,pc:'#16a34a',pb:'#f0fdf4',b:{coc:10,grid:38,policy:30,resource:22},v:'CoC is not the constraint. Grid congestion + permitting explain the gap.',                            ra:'Low-CoC control: deployment gap entirely non-financing. Validates regression isn\'t picking up a development effect.'},
 ];
-
-const bcolors={coc:'#2563eb',grid:'#16a34a',policy:'#ea580c',resource:'#7c3aed'};
-const blabels={coc:'CoC / financing',grid:'Grid access',policy:'Policy / regulatory',resource:'Resource limits'};
-
+const bc={coc:'#2563eb',grid:'#16a34a',policy:'#ea580c',resource:'#7c3aed'};
+const bl={coc:'CoC / financing',grid:'Grid access',policy:'Policy / regulatory',resource:'Resource limits'};
 function renderC(c){
-  document.getElementById('rkdetail').innerHTML=`
-    <div class="rkd-top">
-      <span class="rkd-name">${c.name}</span>
-      <span class="rkd-wacc" style="color:${c.pip}">+${c.wacc.toFixed(1)}% CoC spread</span>
-    </div>
-    <div class="rkd-sub">${c.region} · WACC spread above OECD baseline · Values from Calcaterra et al. Extended Data Fig. 1</div>
-    <div class="attr-label">Deployment gap attribution</div>
-    ${Object.entries(c.b).map(([k,v])=>`
-      <div class="attr-row">
-        <span class="attr-name">${blabels[k]}</span>
-        <div class="attr-track"><div class="attr-fill" style="width:${v}%;background:${bcolors[k]}"></div></div>
-        <span class="attr-val" style="color:${bcolors[k]}">${v}%</span>
-      </div>`).join('')}
-    <div class="rkd-verdict">${c.v}</div>
-    <div class="rkd-research">${c.r}</div>`;
+  document.getElementById('rdet').innerHTML=`
+    <div class="det-name">${c.n} <span style="font-size:13px;color:${c.pc};font-weight:400">+${c.w.toFixed(1)}%</span></div>
+    <div class="det-meta">${c.r} · WACC spread above OECD · Calcaterra et al. Ext. Data Fig. 1</div>
+    <div class="attr-lbl">Deployment gap attribution</div>
+    ${Object.entries(c.b).map(([k,v])=>`<div class="ar"><span class="ar-name">${bl[k]}</span><div class="ar-track"><div class="ar-fill" style="width:${v}%;background:${bc[k]}"></div></div><span class="ar-val" style="color:${bc[k]}">${v}%</span></div>`).join('')}
+    <div class="verdict">${c.v}</div>
+    <div class="research">${c.ra}</div>`;
 }
-
-const rkl=document.getElementById('rklist');
-countries.forEach((c,i)=>{
+const cl=document.getElementById('clist');
+ctries.forEach((c,i)=>{
   const el=document.createElement('div');
-  el.className='rk-item'+(i===0?' on':'');
-  el.innerHTML=`<div><div class="rki-name">${c.name}</div><div class="rki-reg">${c.region}</div></div><span class="rk-pip" style="background:${c.pipbg};color:${c.pip}">+${c.wacc.toFixed(1)}%</span>`;
-  el.onclick=()=>{document.querySelectorAll('.rk-item').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderC(c);};
-  rkl.appendChild(el);
+  el.className='ci'+(i===0?' on':'');
+  el.innerHTML=`<div><div class="ci-name">${c.n}</div><div class="ci-reg">${c.r}</div></div><span class="pip" style="background:${c.pb};color:${c.pc}">+${c.w.toFixed(1)}%</span>`;
+  el.onclick=()=>{document.querySelectorAll('.ci').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderC(c);};
+  cl.appendChild(el);
 });
-renderC(countries[0]);
+renderC(ctries[0]);
 </script>
 </body>
 </html>
